@@ -1,10 +1,13 @@
 const express = require('express');
+const {serverConfig} = require('./config') ;
 
 const app = express();
-const PORT = require('./config') | 3000;
+const apiRoutes = require('./routes')
 
 
+app.use('/api',apiRoutes);
 
-app.listen(PORT,()=>{
-    console.log(`Server is up and running on port: ${PORT}`)
+
+app.listen(serverConfig.PORT,()=>{
+    console.log(`Server is up and running on port: ${serverConfig.PORT}`)
 })

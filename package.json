@@ -4,7 +4,7 @@
   "description": "It is a basic nodeJS template which can be used in all express project.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "node --watch src/index.js"
   },
   "author": "Kishan Singh",
   "license": "ISC",
