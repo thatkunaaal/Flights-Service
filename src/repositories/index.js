@@ -1,3 +1,4 @@
-modeule.exports = {
-    
+
+module.exports = {
+    AirplaneRepository : require("./airplane-repository")
 };
