@@ -1,4 +1,6 @@
 const { Logger } = require("../config");
+const { StatusCodes} = require("http-status-codes")
+const AppError = require("../utils/errors/app-error");
 
 class CrudRepository {
   constructor(model) {
@@ -10,18 +12,18 @@ class CrudRepository {
     return response;
   }
 
-  async destroy(data) {
-    try {
+  async destroy(id) {
       const response = await this.model.destroy({
         where: {
-          id: data,
+          id: id,
         },
       });
+
+      if(!response){
+        throw new AppError("Not able to find resource",StatusCodes.NOT_FOUND);
+      }
+
       return response;
-    } catch (error) {
-      Logger.error("Something went wrong in Crud repo : destroy");
-      throw error;
-    }
   }
 
   async get(data) {
