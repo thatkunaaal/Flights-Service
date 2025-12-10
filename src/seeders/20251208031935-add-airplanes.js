@@ -26,6 +26,12 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date(),
       },
+      {
+        modelNumber: "airbus120",
+        capacity: 180,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
     ]);
   },
 
@@ -40,7 +46,11 @@ module.exports = {
       // modelNumber: {
       //   [Op.or]: [ "boeing777",  "airbus340" ],
       // },
-      [Op.or]: [{ modelNumber: "boeing777" }, { modelNumber: "airbus340" }],
+      [Op.or]: [
+        { modelNumber: "boeing777" },
+        { modelNumber: "airbus340" },
+        { modelNumber: "airbus120" },
+      ],
     });
   },
 };
