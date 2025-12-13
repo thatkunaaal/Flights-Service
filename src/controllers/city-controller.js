@@ -48,8 +48,24 @@ async function createCity(req, res) {
   }
 }
 
+async function destroyCity(req, res) {
+  try {
+    const cityId = req.params.id;
+    const city = await CityService.destroyCity(cityId);
+
+    SuccessResponse.data = city;
+
+    return res.status(StatusCodes.OK).json(SuccessResponse);
+  } catch (error) {
+    ErrorResponse.error = error;
+
+    return res.status(error.StatusCodes).json(ErrorResponse);
+  }
+}
+
 module.exports = {
   getCity,
   getAllCity,
   createCity,
+  destroyCity,
 };

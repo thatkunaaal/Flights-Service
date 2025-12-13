@@ -30,7 +30,6 @@ DELETE : /airplanes/:id  (req.params)
 async function destroyAirplane(req, res) {
   try {
     const airplaneId = req.params.id;
-    console.log(`Airplane id: ${airplaneId}`);
     const airplane = await AirplaneService.destroyAirplane(airplaneId);
 
     SuccessResponse.data = airplane;

@@ -1,19 +1,20 @@
 const { StatusCodes } = require("http-status-codes");
-const {ErrorResponse} = require("../utils/common");
+const { ErrorResponse } = require("../utils/common");
 
-function validateCreateRequest(req,res,next){
+function validateCreateRequest(req, res, next) {
+  if (!req.body || !req.body.modelNumber) {
+    ErrorResponse.message =
+      "ModelNumber should be passed while creating an airplane";
+    ErrorResponse.error = {
+      explanation: "ModelNumber should be passed while creating an airplane",
+    };
 
-    if(!req.body.modelNumber){
-        ErrorResponse.message = "ModelNumber should be passed while creating an airplane";
-        ErrorResponse.error = {explanation: "ModelNumber should be passed while creating an airplane"};
+    return res.status(StatusCodes.BAD_REQUEST).json(ErrorResponse);
+  }
 
-        return res.status(StatusCodes.BAD_REQUEST)
-                .json(ErrorResponse);
-    }
-
-    next();
+  next();
 }
 
 module.exports = {
-     validateCreateRequest,
-}
+  validateCreateRequest,
+};
