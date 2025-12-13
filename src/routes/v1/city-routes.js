@@ -14,4 +14,10 @@ router.post(
 
 router.delete("/:id", CityController.destroyCity);
 
+router.patch(
+  "/:id",
+  CityMiddleware.validateUpdateRequest,
+  CityController.updateCity
+);
+
 module.exports = router;

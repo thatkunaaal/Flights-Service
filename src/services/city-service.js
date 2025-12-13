@@ -64,9 +64,29 @@ async function destroyCity(data) {
   }
 }
 
+async function updateCity(id, data) {
+  try {
+    const city = await cityRepository.update(id, data);
+    return city;
+  } catch (error) {
+    if (error.StatusCodes === StatusCodes.NOT_FOUND) {
+      throw new AppError(
+        "The city you requested to update is not present",
+        error.StatusCodes
+      );
+    }
+
+    throw new AppError(
+      "Something went wrong, while updating the city",
+      StatusCodes.INTERNAL_SERVER_ERROR
+    );
+  }
+}
+
 module.exports = {
   getCity,
   getAllCity,
   createCity,
   destroyCity,
+  updateCity,
 };
