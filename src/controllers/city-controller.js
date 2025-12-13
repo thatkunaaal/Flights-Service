@@ -32,7 +32,24 @@ async function getAllCity(req, res) {
   }
 }
 
+async function createCity(req, res) {
+  try {
+    const city = await CityService.createCity({
+      name: req.body.name,
+    });
+
+    SuccessResponse.data = city;
+
+    return res.status(StatusCodes.CREATED).json(city);
+  } catch (error) {
+    ErrorResponse.error = error;
+
+    return res.status(error.StatusCodes).json(error);
+  }
+}
+
 module.exports = {
   getCity,
   getAllCity,
+  createCity,
 };

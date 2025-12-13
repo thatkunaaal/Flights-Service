@@ -33,7 +33,20 @@ async function getAllCity() {
   }
 }
 
+async function createCity(data) {
+  try {
+    const city = await cityRepository.create(data);
+    return city;
+  } catch (error) {
+    throw new AppError(
+      "Something went wrong while creating Airplane",
+      StatusCodes.INTERNAL_SERVER_ERROR
+    );
+  }
+}
+
 module.exports = {
   getCity,
   getAllCity,
+  createCity
 };
