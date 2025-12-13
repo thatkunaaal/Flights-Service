@@ -17,6 +17,22 @@ async function getCity(req, res) {
   }
 }
 
+async function getAllCity(req, res) {
+  try {
+    const city = await CityService.getAllCity();
+
+    SuccessResponse.data = city;
+
+    return res.status(StatusCodes.OK).json(SuccessResponse);
+  } catch (error) {
+    console.log(error);
+    ErrorResponse.error = error;
+
+    return res.status(error.StatusCodes).json(ErrorResponse);
+  }
+}
+
 module.exports = {
   getCity,
+  getAllCity,
 };

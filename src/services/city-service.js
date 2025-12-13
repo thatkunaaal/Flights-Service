@@ -21,6 +21,19 @@ async function getCity(data) {
   }
 }
 
+async function getAllCity() {
+  try {
+    const city = await cityRepository.getAll();
+    return city;
+  } catch (error) {
+    throw new AppError(
+      "Cannot fetch data of the city",
+      StatusCodes.INTERNAL_SERVER_ERROR
+    );
+  }
+}
+
 module.exports = {
   getCity,
+  getAllCity,
 };
