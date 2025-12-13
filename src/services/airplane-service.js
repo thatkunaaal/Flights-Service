@@ -59,8 +59,21 @@ async function getAirplane(data) {
   }
 }
 
+async function getAllAirplane() {
+  try {
+    const airplane = await airplaneRepository.getAll();
+    return airplane;
+  } catch (error) {
+    throw new AppError(
+      "Something went wrong while fetching all the airplanes",
+      StatusCodes.INTERNAL_SERVER_ERROR
+    );
+  }
+}
+
 module.exports = {
   createAirplane,
   destroyAirplane,
   getAirplane,
+  getAllAirplane,
 };
