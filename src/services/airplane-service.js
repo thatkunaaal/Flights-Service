@@ -71,9 +71,39 @@ async function getAllAirplane() {
   }
 }
 
+async function updateAirplane(id, data) {
+  try {
+    const airplane = await airplaneRepository.update(id, data);
+    return airplane;
+  } catch (error) {
+    if (error.name === "SequelizeValidationError") {
+      const explanation = [];
+
+      for (err of error.errors) {
+        explanation.push(err.message + ", " + err.value);
+      }
+
+      throw new AppError(explanation, StatusCodes.BAD_REQUEST);
+    }
+
+    if (error.StatusCodes === StatusCodes.NOT_FOUND) {
+      throw new AppError(
+        "The airplane you requested to update is not present.",
+        error.StatusCodes
+      );
+    }
+
+    throw new AppError(
+      `Something went wrong while updating the airplane with id: ${id}`,
+      StatusCodes.INTERNAL_SERVER_ERROR
+    );
+  }
+}
+
 module.exports = {
   createAirplane,
   destroyAirplane,
   getAirplane,
   getAllAirplane,
+  updateAirplane,
 };

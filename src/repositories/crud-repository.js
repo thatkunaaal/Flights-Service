@@ -43,17 +43,23 @@ class CrudRepository {
 
   async update(id, data) {
     // data -> obj
-    try {
-      const response = this.model.update(data, {
-        where: {
-          id: id,
-        },
-      });
-      return response;
-    } catch (error) {
-      Logger.error("Something went wrong in Crud repo : update");
-      throw error;
+
+    const response = await this.model.update(data, {
+      where: {
+        id: id,
+      },
+    });
+
+    console.log(response);
+
+    if (response[0] == 0) {
+      throw new AppError(
+        "Not able to find the resource",
+        StatusCodes.NOT_FOUND
+      );
     }
+
+    return response;
   }
 }
 

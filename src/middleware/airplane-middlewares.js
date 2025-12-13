@@ -15,6 +15,21 @@ function validateCreateRequest(req, res, next) {
   next();
 }
 
+function validateUpdateReqeuest(req, res, next) {
+  if (!req.body || !req.body.capacity) {
+    ErrorResponse.message =
+      "Capacity should be provided while updating the airplane";
+    ErrorResponse.error = {
+      explanation: "Capacity should be provided while updating the airplane",
+    };
+
+    return res.status(StatusCodes.BAD_REQUEST).json(ErrorResponse);
+  }
+
+  next();
+}
+
 module.exports = {
   validateCreateRequest,
+  validateUpdateReqeuest,
 };
