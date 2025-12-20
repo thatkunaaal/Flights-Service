@@ -66,9 +66,34 @@ async function getAirports(req, res) {
   }
 }
 
+async function updateAirport(req, res) {
+  try {
+    const airportId = req.params.id;
+
+    const obj = {
+      name: req.body?.name,
+      code: req.body?.code,
+      address: req.body?.address,
+      cityId: req.body?.cityId,
+    };
+
+    const airport = await AirportService.updateAirport(airportId, obj);
+
+    SuccessResponse.data = airport;
+
+    return res.status(StatusCodes.OK).json(SuccessResponse);
+  } catch (error) {
+    console.log(error);
+    ErrorResponse.error = error;
+
+    return res.status(error.StatusCodes).json(ErrorResponse);
+  }
+}
+
 module.exports = {
   createAirport,
   destroyAirport,
   getAirport,
   getAirports,
+  updateAirport,
 };

@@ -72,9 +72,39 @@ async function getAirports() {
   }
 }
 
+async function updateAirport(id, data) {
+  try {
+    const airport = await AirportRepo.update(id, data);
+    return airport;
+  } catch (error) {
+    if (error.name === "SequelizeValidationError") {
+      const explanation = [];
+
+      for (err of error.errors) {
+        explanation.push(err.message + ", " + err.value);
+      }
+
+      throw new AppError(explanation, StatusCodes.BAD_REQUEST);
+    }
+
+    if (error.StatusCodes === StatusCodes.NOT_FOUND) {
+      throw new AppError(
+        "The airplane you requested to update is not present.",
+        error.StatusCodes
+      );
+    }
+
+    throw new AppError(
+      "Something went wrong while updating all the Airport",
+      StatusCodes.INTERNAL_SERVER_ERROR
+    );
+  }
+}
+
 module.exports = {
   createAirport,
   destroyAirport,
   getAirport,
   getAirports,
+  updateAirport,
 };
