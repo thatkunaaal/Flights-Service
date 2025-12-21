@@ -109,6 +109,8 @@ function validateDepartureAndArrivalTime(req, res, next) {
 
     return res.status(StatusCodes.BAD_REQUEST).json(ErrorResponse);
   }
+
+  next();
 }
 
 module.exports = {
