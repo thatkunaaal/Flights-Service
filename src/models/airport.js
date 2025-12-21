@@ -1,6 +1,5 @@
 "use strict";
 const { Model } = require("sequelize");
-const { City } = require("./index");
 
 module.exports = (sequelize, DataTypes) => {
   class Airport extends Model {
@@ -20,11 +19,13 @@ module.exports = (sequelize, DataTypes) => {
       this.hasMany(models.flight, {
         foreignKey: "arrivalAirportId",
         onDelete: "CASCADE",
+        as: "arrivalFlight",
       });
 
       this.hasMany(models.flight, {
         foreignKey: "departureAirportId",
         onDelete: "CASCADE",
+        as: "departureFlight",
       });
     }
   }
