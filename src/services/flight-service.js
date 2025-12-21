@@ -55,6 +55,12 @@ async function getAllFlights(query) {
       };
     }
 
+    if (query.travellers) {
+      customFilter.totalSeats = {
+        [Op.gte]: query.travellers,
+      };
+    }
+
     if (query.tripDate) {
       const tripStartTime = new Date(query.tripDate);
       const tripEndTime = new Date(query.tripDate);
