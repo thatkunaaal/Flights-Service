@@ -1,6 +1,7 @@
 const { StatusCodes } = require("http-status-codes");
 const { ErrorResponse } = require("../utils/common");
 const { DatetimeHelper } = require("../utils/helper");
+const { AirportCodeHelper } = require("../utils/helper");
 
 function validateCreateRequest(req, res, next) {
   if (!req.body) {
@@ -113,7 +114,30 @@ function validateDepartureAndArrivalTime(req, res, next) {
   next();
 }
 
+function validateDepartureAndArrivalAirportId(req, res, next) {
+  const departureAirportCode = req.body.departureAirportId;
+  const arrivalAirportCode = req.body.arrivalAirportId;
+
+  if (
+    AirportCodeHelper.checkDeptarureAndArrivalAirportCodeIsEqual(
+      departureAirportCode,
+      arrivalAirportCode
+    )
+  ) {
+    ErrorResponse.message = "Something went wrong while creating Flight";
+    ErrorResponse.error = {
+      explanation:
+        "Departure airport code & arrival airport code should not be equal",
+    };
+
+    return res.status(StatusCodes.BAD_REQUEST).json(ErrorResponse);
+  }
+
+  next();
+}
+
 module.exports = {
   validateCreateRequest,
   validateDepartureAndArrivalTime,
+  validateDepartureAndArrivalAirportId,
 };

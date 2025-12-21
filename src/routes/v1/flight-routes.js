@@ -7,7 +7,14 @@ router.post(
   "/",
   FlightMiddleware.validateCreateRequest,
   FlightMiddleware.validateDepartureAndArrivalTime,
+  FlightMiddleware.validateDepartureAndArrivalAirportId,
   FlightController.createFlight
 );
+
+/*
+ * GET
+ * /api/v1/flights
+ */
+router.get("/", FlightController.getAllFlights);
 
 module.exports = router;
