@@ -40,6 +40,7 @@ async function getAllFlights(query) {
 
     if (query.trips) {
       const [departureAirportId, arrivalAirportId] = query.trips.split("-");
+
       customFilter.departureAirportId = departureAirportId;
       customFilter.arrivalAirportId = arrivalAirportId;
     }
