@@ -1,6 +1,7 @@
 const { StatusCodes } = require("http-status-codes");
 const { FlightRepository } = require("../repositories");
 const AppError = require("../utils/errors/app-error");
+const { Op } = require("sequelize");
 const flightRepo = new FlightRepository();
 
 async function createFlight(data) {
@@ -45,9 +46,30 @@ async function getAllFlights(query) {
       customFilter.arrivalAirportId = arrivalAirportId;
     }
 
+    if (query.price) {
+      const [minPrice, maxPrice] = query.price.split("-");
+
+      customFilter.price = {
+        [Op.between]: [!minPrice ? 0 : minPrice, !maxPrice ? 15000 : maxPrice],
+      };
+    }
+
+    if (query.tripDate) {
+      const tripStartTime = new Date(query.tripDate);
+      const tripEndTime = new Date(query.tripDate);
+
+      tripEndTime.setUTCDate(tripEndTime.getUTCDate() + 1);
+      tripEndTime.setUTCMilliseconds(tripEndTime.getUTCMilliseconds() - 1);
+
+      customFilter.departureTime = {
+        [Op.between]: [tripStartTime, tripEndTime],
+      };
+    }
+
     const flights = await flightRepo.getAllFlights(customFilter);
     return flights;
   } catch (error) {
+    console.log(error);
     throw new AppError(
       "Something went wrong while fetching the flights",
       StatusCodes.INTERNAL_SERVER_ERROR
