@@ -38,6 +38,7 @@ async function createFlight(data) {
 async function getAllFlights(query) {
   try {
     const customFilter = {};
+    let customSort = [];
 
     if (query.trips) {
       const [departureAirportId, arrivalAirportId] = query.trips.split("-");
@@ -66,7 +67,14 @@ async function getAllFlights(query) {
       };
     }
 
-    const flights = await flightRepo.getAllFlights(customFilter);
+    if (query.sort) {
+      const sortField = query.sort.split(",");
+      const sort = sortField.map((sortingField) => sortingField.split("_"));
+
+      customSort = sort;
+    }
+
+    const flights = await flightRepo.getAllFlights(customFilter, customSort);
     return flights;
   } catch (error) {
     console.log(error);
