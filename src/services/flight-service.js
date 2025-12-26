@@ -91,7 +91,26 @@ async function getAllFlights(query) {
   }
 }
 
+async function getFlight(data) {
+  try {
+    const response = await flightRepo.get(data);
+    return response;
+  } catch (error) {
+    if (error.StatusCodes === StatusCodes.NOT_FOUND) {
+      throw new AppError(
+        "The flight you requested is not currently present",
+        error.StatusCodes
+      );
+    }
+    throw new AppError(
+      "Something went wrong while fetching the flight",
+      StatusCodes.INTERNAL_SERVER_ERROR
+    );
+  }
+}
+
 module.exports = {
   createFlight,
   getAllFlights,
+  getFlight,
 };

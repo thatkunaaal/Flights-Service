@@ -41,6 +41,7 @@ class FlightRepository extends CrudRepository {
     });
     return flights;
   }
+
 }
 
 module.exports = FlightRepository;

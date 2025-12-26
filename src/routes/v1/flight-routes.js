@@ -17,4 +17,10 @@ router.post(
  */
 router.get("/", FlightController.getAllFlights);
 
+/*
+ * GET : /flights/:id 
+ * req-body {}
+ */
+router.get("/:id", FlightController.getFlight);
+
 module.exports = router;
