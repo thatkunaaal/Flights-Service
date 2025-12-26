@@ -136,8 +136,33 @@ function validateDepartureAndArrivalAirportId(req, res, next) {
   next();
 }
 
+function validateUpdateRemainingSeatsRequest(req, res, next) {
+  if (!req.body) {
+    (ErrorResponse.message = "Something went wrong while creating Flight"),
+      (ErrorResponse.error = {
+        explanation:
+          "You should pass necessary properties while updating seats of flight",
+      });
+
+    return res.status(StatusCodes.BAD_REQUEST).json(ErrorResponse);
+  }
+
+  if (!req.body.seats) {
+    ErrorResponse.message = "Something went wrong while updating flight seats";
+    ErrorResponse.error = {
+      explanation:
+        "Number of seats should be passed while updating flight seats",
+    };
+
+    return res.status(StatusCodes.BAD_REQUEST).json(ErrorResponse);
+  }
+
+  next();
+}
+
 module.exports = {
   validateCreateRequest,
   validateDepartureAndArrivalTime,
   validateDepartureAndArrivalAirportId,
+  validateUpdateRemainingSeatsRequest,
 };

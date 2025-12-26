@@ -18,9 +18,22 @@ router.post(
 router.get("/", FlightController.getAllFlights);
 
 /*
- * GET : /flights/:id 
+ * GET : /flights/:id
  * req-body {}
  */
 router.get("/:id", FlightController.getFlight);
+
+/*
+ * PATCH : /flights/:id
+ * req-body : {
+ *    seats,
+ *    dec,
+ * }
+ */
+router.patch(
+  "/:id",
+  FlightMiddleware.validateUpdateRemainingSeatsRequest,
+  FlightController.updateRemainingSeats
+);
 
 module.exports = router;
