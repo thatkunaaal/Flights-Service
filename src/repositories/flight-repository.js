@@ -1,6 +1,6 @@
 const { Sequelize, col } = require("sequelize");
 const CrudRepository = require("./crud-repository");
-const { flight, Airport, Airplane } = require("../models");
+const { flight, Airport, Airplane, sequelize } = require("../models");
 
 class FlightRepository extends CrudRepository {
   constructor() {
@@ -43,6 +43,10 @@ class FlightRepository extends CrudRepository {
   }
 
   async updateRemainingSeats(flightId, seats, dec = true) {
+    await sequelize.query(
+      `SELECT * FROM flights WHERE id = ${flightId} FOR UPDATE;`
+    );
+
     const flightInstance = await flight.findByPk(flightId);
 
     if (Number(dec)) {
