@@ -24,14 +24,14 @@ router.get("/", FlightController.getAllFlights);
 router.get("/:id", FlightController.getFlight);
 
 /*
- * PATCH : /flights/:id
+ * PATCH : /flights/:id/seats
  * req-body : {
  *    seats,
  *    dec,
  * }
  */
 router.patch(
-  "/:id",
+  "/:id/seats",
   FlightMiddleware.validateUpdateRemainingSeatsRequest,
   FlightController.updateRemainingSeats
 );
