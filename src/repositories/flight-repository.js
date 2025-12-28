@@ -2,6 +2,8 @@ const { Sequelize, col } = require("sequelize");
 const CrudRepository = require("./crud-repository");
 const { flight, Airport, Airplane, sequelize } = require("../models");
 const { addRowLockOnFlight } = require("./queries");
+const AppError = require("../utils/errors/app-error");
+const { StatusCodes } = require("http-status-codes");
 
 class FlightRepository extends CrudRepository {
   constructor() {
@@ -44,18 +46,44 @@ class FlightRepository extends CrudRepository {
   }
 
   async updateRemainingSeats(flightId, seats, dec = true) {
-    await sequelize.query(addRowLockOnFlight(flightId));
+    const transaction = await sequelize.transaction();
 
-    const flightInstance = await flight.findByPk(flightId);
+    try {
+      await sequelize.query(addRowLockOnFlight(flightId), {
+        transaction: transaction,
+      });
 
-    if (Number(dec)) {
-      await flightInstance.decrement("totalSeats", { by: seats });
-    } else {
-      await flightInstance.increment("totalSeats", { by: seats });
+      const flightInstance = await flight.findByPk(flightId, {
+        transaction: transaction,
+      });
+
+      if (flightInstance.totalSeats == 200 && dec != true) {
+        throw new AppError(
+          "Cannot increase seats above the maximum capacity of the Airplane",
+          StatusCodes.BAD_REQUEST
+        );
+      }
+
+      if (Number(dec)) {
+        await flightInstance.decrement("totalSeats", {
+          by: seats,
+          transaction: transaction,
+        });
+      } else {
+        await flightInstance.increment("totalSeats", {
+          by: seats,
+          transaction: transaction,
+        });
+      }
+
+      await transaction.commit();
+      await flightInstance.reload();
+
+      return flightInstance;
+    } catch (error) {
+      await transaction.rollback();
+      throw error;
     }
-
-    await flightInstance.reload();
-    return flightInstance;
   }
 }
 
