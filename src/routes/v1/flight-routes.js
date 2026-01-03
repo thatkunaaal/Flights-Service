@@ -5,6 +5,7 @@ const { FlightMiddleware } = require("../../middleware");
 
 router.post(
   "/",
+  FlightMiddleware.validateAdminOrFlightCompanyRoles,
   FlightMiddleware.validateCreateRequest,
   FlightMiddleware.validateDepartureAndArrivalTime,
   FlightMiddleware.validateDepartureAndArrivalAirportId,

@@ -2,6 +2,7 @@ const { StatusCodes } = require("http-status-codes");
 const { ErrorResponse } = require("../utils/common");
 const { DatetimeHelper } = require("../utils/helper");
 const { AirportCodeHelper } = require("../utils/helper");
+const { Enum } = require("../utils/common");
 
 function validateCreateRequest(req, res, next) {
   if (!req.body) {
@@ -160,9 +161,27 @@ function validateUpdateRemainingSeatsRequest(req, res, next) {
   next();
 }
 
+function validateAdminOrFlightCompanyRoles(req, res, next) {
+  const jsonData = req.get("user");
+  const user = JSON.parse(jsonData);
+
+  const roles = user.role;
+
+  if (
+    roles.includes(Enum.USER_ROLES.ADMIN) ||
+    roles.includes(Enum.USER_ROLES.FLIGHT_COMPANY)
+  )
+    next();
+
+  ErrorResponse.error = "Insufficient priviledge";
+
+  return res.status(StatusCodes.UNAUTHORIZED).json(ErrorResponse);
+}
+
 module.exports = {
   validateCreateRequest,
   validateDepartureAndArrivalTime,
   validateDepartureAndArrivalAirportId,
   validateUpdateRemainingSeatsRequest,
+  validateAdminOrFlightCompanyRoles,
 };
